@@ -19,11 +19,13 @@ import (
 type Proxy struct {
 	srv   *http.Server
 	query *query.Query
+	rc    *relingo.Client
 }
 
-func NewProxy(query *query.Query) *Proxy {
+func NewProxy(query *query.Query, rc *relingo.Client) *Proxy {
 	return &Proxy{
 		srv:   &http.Server{Addr: ":8119"},
+		rc:    rc,
 		query: query,
 	}
 }
@@ -32,6 +34,12 @@ func (p *Proxy) Run() error {
 	proxy := goproxy.NewProxyHttpServer()
 	// proxy.Verbose = true
 	proxy.OnRequest().HandleConnect(goproxy.AlwaysMitm)
+	proxy.OnRequest(goproxy.ReqHostIs("relingo.net:443")).DoFunc(func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
+		authzToken := req.Header.Get("x-relingo-token")
+		fmt.Println(111, req.URL.Host, authzToken)
+		p.rc.SetToken(authzToken)
+		return req, nil
+	})
 	proxy.OnResponse(goproxy.UrlIs("/api/parseContent2")).DoFunc(func(resp *http.Response, ctx *goproxy.ProxyCtx) *http.Response {
 		bodyBytes, err := io.ReadAll(resp.Body)
 		if err != nil {
@@ -52,7 +60,7 @@ func (p *Proxy) Stop(ctx context.Context) (err error) {
 }
 
 func (p *Proxy) hookWords(body []byte) {
-	var data relingo.Response
+	var data relingo.Response[relingo.RespParseContent2]
 	if err := json.Unmarshal(body, &data); err != nil {
 		log.Println(err)
 		return
@@ -70,7 +78,7 @@ func (p *Proxy) hookWords(body []byte) {
 		}
 
 		w.Exposures++
-		fmt.Println(word.Source, w.Exposures)
+		// fmt.Println(word.Source, w.Exposures)
 		if err := p.query.Word.Where(p.query.Word.Id.Eq(w.Id)).Save(w); err != nil {
 			log.Println(err)
 			return

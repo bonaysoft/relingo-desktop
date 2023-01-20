@@ -7,6 +7,7 @@ import (
 	"github.com/bonaysoft/relingo-desktop/pkg/dal/model"
 	"github.com/bonaysoft/relingo-desktop/pkg/dal/query"
 	"github.com/bonaysoft/relingo-desktop/pkg/proxy"
+	"github.com/bonaysoft/relingo-desktop/pkg/relingo"
 
 	"github.com/glebarez/sqlite"
 	"gorm.io/gorm"
@@ -18,11 +19,12 @@ type App struct {
 
 	query *query.Query
 	p     *proxy.Proxy
+	rc    *relingo.Client
 }
 
 // NewApp creates a new App application struct
 func NewApp() *App {
-	gormdb, err := gorm.Open(sqlite.Open("gorm.db"))
+	gormdb, err := gorm.Open(sqlite.Open("/Users/yanbo/Develop/bogit/relingo-desktop/gorm.db"))
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -30,9 +32,11 @@ func NewApp() *App {
 	gormdb.AutoMigrate(model.Word{})
 
 	q := query.Use(gormdb)
+	rc := relingo.NewClient()
 	return &App{
 		query: q,
-		p:     proxy.NewProxy(q),
+		rc:    rc,
+		p:     proxy.NewProxy(q, rc),
 	}
 }
 
@@ -44,15 +48,21 @@ func (a *App) startup(ctx context.Context) {
 }
 
 func (a *App) shutdown(ctx context.Context) {
-	a.p.Stop(ctx)
+	_ = a.p.Stop(ctx)
 }
 
-// Greet returns a greeting for the given name
-func (a *App) Greet(name string) []*model.Word {
+func (a *App) FindNewWords() []*model.Word {
 	words, err := a.query.Word.Find()
 	if err != nil {
 		return nil
 	}
 
 	return words
+}
+
+func (a *App) getBinds() []interface{} {
+	return []interface{}{
+		a,
+		a.rc,
+	}
 }

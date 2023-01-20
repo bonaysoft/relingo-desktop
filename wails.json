@@ -1,6 +1,6 @@
 {
   "$schema": "https://wails.io/schemas/config.v2.json",
-  "name": "relingo-desktop",
+  "name": "Relingo",
   "outputfilename": "relingo-desktop",
   "frontend:install": "npm install",
   "frontend:build": "npm run build",

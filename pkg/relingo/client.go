@@ -1,0 +1,104 @@
+package relingo
+
+import (
+	"errors"
+	"fmt"
+
+	"github.com/go-resty/resty/v2"
+)
+
+type Client struct {
+	hc *resty.Client
+
+	token string
+}
+
+func NewClient() *Client {
+	c := &Client{}
+	c.hc = resty.New().SetBaseURL("https://relingo.net/api").OnBeforeRequest(func(client *resty.Client, request *resty.Request) error {
+		if c.token == "" {
+			return errors.New("empty token")
+		}
+
+		return nil
+	})
+	return c
+}
+
+func (c *Client) SetToken(token string) {
+	c.token = token
+}
+
+func (c *Client) GetUserInfo() (*RespUserInfo, error) {
+	var userInfo RespUserInfo
+	result := NewResponse(userInfo)
+	resp, err := c.hc.R().SetHeaders(c.relingoHeaders()).SetResult(result).Post("/getUserInfo")
+	if err != nil {
+		return nil, err
+	}
+
+	if err := checkResult(resp, result); err != nil {
+		return nil, err
+	}
+
+	return &result.Data, nil
+}
+
+// GetVocabularyList 获取生词本列表
+func (c *Client) GetVocabularyList() ([]VocabularyListItem, error) {
+	var data []VocabularyListItem
+	result := NewResponse(data)
+	resp, err := c.hc.R().SetHeaders(c.relingoHeaders()).SetResult(result).Post("/getVocabularyList")
+	if err != nil {
+		return nil, err
+	}
+
+	if err := checkResult(resp, result); err != nil {
+		return nil, err
+	}
+
+	return result.Data, nil
+}
+
+// GetVocabulary 获取某个生词本的所有单词
+func (c *Client) GetVocabulary(id, typ string) ([]string, error) {
+	var data Vocabulary
+	result := NewResponse(data)
+	resp, err := c.hc.R().SetHeaders(c.relingoHeaders()).SetBody(&VocabularyBody{Id: id, Type: typ}).
+		SetResult(result).Post("/getVocabulary")
+	if err != nil {
+		return nil, err
+	}
+
+	if err := checkResult(resp, result); err != nil {
+		return nil, err
+	}
+
+	return result.Data.Words, nil
+}
+
+// MasteredWords 获取已掌握的单词
+func (c *Client) MasteredWords(id string) ([]string, error) {
+	return c.GetVocabulary(id, "mastered")
+}
+
+func (c *Client) relingoHeaders() map[string]string {
+	return map[string]string{
+		"User-Agent":        "relingo-desktop",
+		"x-relingo-lang":    "cn",
+		"x-relingo-token":   c.token,
+		"x-relingo-version": "2.4.0",
+	}
+}
+
+func checkResult[Data RD](resp *resty.Response, result *Response[Data]) error {
+	if resp.IsError() {
+		return fmt.Errorf("call failed: %s", resp.String())
+	}
+
+	if result.Code != 0 {
+		return fmt.Errorf("call relingo api: %s", result.Message)
+	}
+
+	return nil
+}
