@@ -10,15 +10,15 @@
       <v-divider></v-divider>
 
       <v-list density="compact" nav>
-        <v-list-item prepend-icon="mdi-home-city" title="我的生词" value="home"></v-list-item>
-        <v-list-item prepend-icon="mdi-account" title="全部单词" value="account"></v-list-item>
-        <v-list-item prepend-icon="mdi-account-group-outline" title="已掌握单词" value="users"></v-list-item>
+        <v-list-item prepend-icon="mdi-home-city" title="我的生词" value="home" to="home"></v-list-item>
+        <v-list-item prepend-icon="mdi-account" title="全部单词" value="account" to="words"></v-list-item>
+        <v-list-item prepend-icon="mdi-account-group-outline" title="已掌握单词" value="users" to="mastered"></v-list-item>
       </v-list>
     </v-navigation-drawer>
 
     <v-main>
       <v-container>
-        <HelloWorld />
+        <router-view></router-view>
       </v-container>
     </v-main>
   </v-app>
@@ -26,7 +26,6 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import HelloWorld from '@/components/HelloWorld.vue'
 import { GetUserInfo } from '@/../wailsjs/go/relingo/Client';
 
 const uInfo = ref<any>({})

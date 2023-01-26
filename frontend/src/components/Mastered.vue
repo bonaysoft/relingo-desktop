@@ -1,13 +1,16 @@
 <script lang="ts" setup>
-import { ref, reactive, onMounted } from 'vue'
-import { FindNewWords } from '../../wailsjs/go/main/App'
-import { model } from '../../wailsjs/go/models';
+import { ref, reactive, onMounted, computed } from 'vue'
+import { GetVocabularyList, GetVocabulary } from '@/../wailsjs/go/relingo/Client';
 
 const words = ref<any>([])
+const masteredCount = computed(() => {return words.value.length})
+
 const refresh = () => {
-  FindNewWords().then(result => {
-    words.value = result.sort((a: model.Word, b: model.Word) => b.exposures - a.exposures)
+  GetVocabularyList().then(vocabularyList => {
+    const mastered = vocabularyList.find(el => el.type == 'mastered')
+    words.value = mastered?.words?.map(word => ({ name: word }))
   })
+
 }
 
 onMounted(refresh)
@@ -16,7 +19,7 @@ onMounted(refresh)
 
 <template>
   <main>
-    <v-btn class="btn" @click="refresh">刷新</v-btn>
+    已掌握总数{{ masteredCount }}
 
     <!-- <v-list-item v-for="item in words" :key="item.source" :title="item.source" :subtitle="item.exposures"></v-list-item> -->
 
@@ -39,7 +42,7 @@ onMounted(refresh)
       </thead>
       <tbody>
         <tr v-for="item in words" :key="item.name">
-          <td class="text-left">{{ item.source }}</td>
+          <td class="text-left">{{ item.name }}</td>
           <td class="text-center">{{ item.exposures }}</td>
           <td class="text-left">{{ $dayjs(item.updated_at).format("YYYY-MM-DD HH:mm:ss") }}</td>
           <td class="text-left">{{ $dayjs(item.created_at).format("YYYY-MM-DD HH:mm:ss") }}</td>

@@ -24,7 +24,7 @@ type App struct {
 
 // NewApp creates a new App application struct
 func NewApp() *App {
-	gormdb, err := gorm.Open(sqlite.Open("/Users/yanbo/Develop/bogit/relingo-desktop/gorm.db"))
+	gormdb, err := gorm.Open(sqlite.Open("/Users/yanbo/CloudDocs/relingo-desktop/gorm.db"))
 	if err != nil {
 		log.Fatalln(err)
 	}
