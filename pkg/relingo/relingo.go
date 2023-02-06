@@ -24,8 +24,9 @@ type RespUserInfo struct {
 }
 
 type VocabularyBody struct {
-	Id   string `json:"id"`
-	Type string `json:"type"`
+	Id    string   `json:"id"`
+	Type  string   `json:"type"`
+	Words []string `json:"words,omitempty"`
 }
 
 type Vocabulary struct {

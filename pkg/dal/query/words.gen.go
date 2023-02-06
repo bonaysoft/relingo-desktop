@@ -30,6 +30,10 @@ func newWord(db *gorm.DB, opts ...gen.DOOption) word {
 	_word.Id = field.NewInt(tableName, "id")
 	_word.Source = field.NewString(tableName, "source")
 	_word.Exposures = field.NewInt(tableName, "exposures")
+	_word.Mastered = field.NewBool(tableName, "mastered")
+	_word.CreatedAt = field.NewTime(tableName, "created_at")
+	_word.UpdatedAt = field.NewTime(tableName, "updated_at")
+	_word.DeletedAt = field.NewTime(tableName, "deleted_at")
 
 	_word.fillFieldMap()
 
@@ -43,6 +47,10 @@ type word struct {
 	Id        field.Int
 	Source    field.String
 	Exposures field.Int
+	Mastered  field.Bool
+	CreatedAt field.Time
+	UpdatedAt field.Time
+	DeletedAt field.Time
 
 	fieldMap map[string]field.Expr
 }
@@ -62,6 +70,10 @@ func (w *word) updateTableName(table string) *word {
 	w.Id = field.NewInt(table, "id")
 	w.Source = field.NewString(table, "source")
 	w.Exposures = field.NewInt(table, "exposures")
+	w.Mastered = field.NewBool(table, "mastered")
+	w.CreatedAt = field.NewTime(table, "created_at")
+	w.UpdatedAt = field.NewTime(table, "updated_at")
+	w.DeletedAt = field.NewTime(table, "deleted_at")
 
 	w.fillFieldMap()
 
@@ -78,10 +90,14 @@ func (w *word) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (w *word) fillFieldMap() {
-	w.fieldMap = make(map[string]field.Expr, 3)
+	w.fieldMap = make(map[string]field.Expr, 7)
 	w.fieldMap["id"] = w.Id
 	w.fieldMap["source"] = w.Source
 	w.fieldMap["exposures"] = w.Exposures
+	w.fieldMap["mastered"] = w.Mastered
+	w.fieldMap["created_at"] = w.CreatedAt
+	w.fieldMap["updated_at"] = w.UpdatedAt
+	w.fieldMap["deleted_at"] = w.DeletedAt
 }
 
 func (w word) clone(db *gorm.DB) word {

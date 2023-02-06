@@ -3,9 +3,7 @@ package main
 import (
 	"github.com/bonaysoft/relingo-desktop/pkg/dal/model"
 
-	"github.com/glebarez/sqlite"
 	"gorm.io/gen"
-	"gorm.io/gorm"
 )
 
 func main() {
@@ -14,8 +12,8 @@ func main() {
 		Mode:    gen.WithoutContext | gen.WithDefaultQuery | gen.WithQueryInterface, // generate mode
 	})
 
-	gormdb, _ := gorm.Open(sqlite.Open("gorm.db"))
-	g.UseDB(gormdb) // reuse your gorm db
+	// gormdb, _ := gorm.Open(sqlite.Open("gorm.db"))
+	// g.UseDB(gormdb) // reuse your gorm db
 
 	// Generate basic type-safe DAO API for struct `model.User` following conventions
 	g.ApplyBasic(model.Word{})

@@ -4,6 +4,7 @@ export namespace model {
 	    id: number;
 	    source: string;
 	    exposures: number;
+	    mastered: boolean;
 	    // Go type: time.Time
 	    created_at: any;
 	    // Go type: time.Time
@@ -20,6 +21,7 @@ export namespace model {
 	        this.id = source["id"];
 	        this.source = source["source"];
 	        this.exposures = source["exposures"];
+	        this.mastered = source["mastered"];
 	        this.created_at = this.convertValues(source["created_at"], null);
 	        this.updated_at = this.convertValues(source["updated_at"], null);
 	        this.deleted_at = this.convertValues(source["deleted_at"], null);

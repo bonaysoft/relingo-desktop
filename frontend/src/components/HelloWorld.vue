@@ -1,24 +1,37 @@
 <script lang="ts" setup>
-import { ref, reactive, onMounted } from 'vue'
-import { FindNewWords } from '../../wailsjs/go/main/App'
+import { ref, reactive, onMounted, watch } from 'vue'
+import { FindNewWords, SubmitVocabulary } from '../../wailsjs/go/main/App'
 import { model } from '../../wailsjs/go/models';
 
 const words = ref<any>([])
+const currentTab = ref<any>()
 const refresh = () => {
-  FindNewWords().then(result => {
+  console.log(currentTab.value, 111);
+
+
+  FindNewWords(currentTab.value).then(result => {
     words.value = result.sort((a: model.Word, b: model.Word) => b.exposures - a.exposures)
   })
 }
 
+const submitVocabulary = (words: string[]) => {
+  SubmitVocabulary(words).then(refresh)
+}
+
 onMounted(refresh)
+watch(currentTab, refresh)
 
 </script>
 
 <template>
   <main>
-    <v-btn class="btn" @click="refresh">刷新</v-btn>
-
-    <!-- <v-list-item v-for="item in words" :key="item.source" :title="item.source" :subtitle="item.exposures"></v-list-item> -->
+    <v-tabs bg-color="primary" v-model="currentTab">
+      <v-tab value="today">今日生词</v-tab>
+      <v-tab value="yesterday">昨日生词</v-tab>
+      <v-tab value="week">本周生词</v-tab>
+      <v-tab value="all">全部生词</v-tab>
+    </v-tabs>
+    {{ words.length }}
 
     <v-table density="compact">
       <thead>
@@ -27,10 +40,10 @@ onMounted(refresh)
             单词
           </th>
           <th class="text-center">
-            出现次数
+            累计出现次数
           </th>
           <th class="text-left" style="width: 180px">
-            上次出现
+            最近出现
           </th>
           <th class="text-left" style="width: 180px">
             最初出现
@@ -39,7 +52,9 @@ onMounted(refresh)
       </thead>
       <tbody>
         <tr v-for="item in words" :key="item.name">
-          <td class="text-left">{{ item.source }}</td>
+          <td class="text-left">{{ item.source }}
+            <v-btn size="x-small" @click="submitVocabulary([item.source])">掌握</v-btn>
+          </td>
           <td class="text-center">{{ item.exposures }}</td>
           <td class="text-left">{{ $dayjs(item.updated_at).format("YYYY-MM-DD HH:mm:ss") }}</td>
           <td class="text-left">{{ $dayjs(item.created_at).format("YYYY-MM-DD HH:mm:ss") }}</td>

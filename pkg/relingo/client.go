@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/go-resty/resty/v2"
+	"github.com/samber/lo"
 )
 
 type Client struct {
@@ -80,6 +81,29 @@ func (c *Client) GetVocabulary(id, typ string) ([]string, error) {
 // MasteredWords 获取已掌握的单词
 func (c *Client) MasteredWords(id string) ([]string, error) {
 	return c.GetVocabulary(id, "mastered")
+}
+
+func (c *Client) SubmitVocabulary(words []string) error {
+	vs, err := c.GetVocabularyList()
+	if err != nil {
+		return err
+	}
+
+	masteredItem, ok := lo.Find(vs, func(item VocabularyListItem) bool { return item.Type == "mastered" })
+	if !ok {
+		return fmt.Errorf("not found mastered uid")
+	}
+
+	var data Vocabulary
+	result := NewResponse(data)
+	resp, err := c.hc.R().SetHeaders(c.relingoHeaders()).SetBody(&VocabularyBody{Id: masteredItem.Id, Type: "mastered", Words: words}).
+		SetResult(result).Post("/submitVocabulary")
+	if err != nil {
+		return err
+	}
+	fmt.Println(resp.Request.Body, resp.String())
+
+	return checkResult(resp, result)
 }
 
 func (c *Client) relingoHeaders() map[string]string {

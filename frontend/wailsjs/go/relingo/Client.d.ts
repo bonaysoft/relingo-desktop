@@ -11,3 +11,5 @@ export function GetVocabularyList():Promise<Array<relingo.VocabularyListItem>>;
 export function MasteredWords(arg1:string):Promise<Array<string>>;
 
 export function SetToken(arg1:string):Promise<void>;
+
+export function SubmitVocabulary(arg1:Array<string>):Promise<void>;

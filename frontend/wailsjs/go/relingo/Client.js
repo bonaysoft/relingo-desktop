@@ -21,3 +21,7 @@ export function MasteredWords(arg1) {
 export function SetToken(arg1) {
   return window['go']['relingo']['Client']['SetToken'](arg1);
 }
+
+export function SubmitVocabulary(arg1) {
+  return window['go']['relingo']['Client']['SubmitVocabulary'](arg1);
+}

@@ -67,10 +67,6 @@ func (p *Proxy) hookWords(body []byte) {
 	}
 
 	for _, word := range data.Data.Words {
-		if word.Mastered {
-			continue
-		}
-
 		w, err := p.query.Word.Where(p.query.Word.Source.Eq(word.Source)).Take()
 		if err != nil {
 			// return
@@ -78,6 +74,7 @@ func (p *Proxy) hookWords(body []byte) {
 		}
 
 		w.Exposures++
+		w.Mastered = word.Mastered
 		// fmt.Println(word.Source, w.Exposures)
 		if err := p.query.Word.Where(p.query.Word.Id.Eq(w.Id)).Save(w); err != nil {
 			log.Println(err)
