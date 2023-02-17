@@ -32,11 +32,9 @@ func NewProxy(query *query.Query, rc *relingo.Client) *Proxy {
 
 func (p *Proxy) Run() error {
 	proxy := goproxy.NewProxyHttpServer()
-	// proxy.Verbose = true
 	proxy.OnRequest().HandleConnect(goproxy.AlwaysMitm)
-	proxy.OnRequest(goproxy.ReqHostIs("relingo.net:443")).DoFunc(func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
+	proxy.OnRequest(goproxy.ReqHostIs("api.relingo.net:443")).DoFunc(func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
 		authzToken := req.Header.Get("x-relingo-token")
-		fmt.Println(111, req.URL.Host, authzToken)
 		p.rc.SetToken(authzToken)
 		return req, nil
 	})

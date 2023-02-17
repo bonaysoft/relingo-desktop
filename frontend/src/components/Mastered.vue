@@ -20,18 +20,15 @@ onMounted(refresh)
 <template>
   <main>
     已掌握总数{{ masteredCount }}
-
-    <!-- <v-list-item v-for="item in words" :key="item.source" :title="item.source" :subtitle="item.exposures"></v-list-item> -->
-
     <v-table density="compact">
       <thead>
         <tr>
           <th class="text-left">
             单词
           </th>
-          <th class="text-center">
+          <!-- <th class="text-center">
             出现次数
-          </th>
+          </th> -->
           <th class="text-left" style="width: 180px">
             上次出现
           </th>
@@ -43,7 +40,7 @@ onMounted(refresh)
       <tbody>
         <tr v-for="item in words" :key="item.name">
           <td class="text-left">{{ item.name }}</td>
-          <td class="text-center">{{ item.exposures }}</td>
+          <!-- <td class="text-center">{{ item.exposures }}</td> -->
           <td class="text-left">{{ $dayjs(item.updated_at).format("YYYY-MM-DD HH:mm:ss") }}</td>
           <td class="text-left">{{ $dayjs(item.created_at).format("YYYY-MM-DD HH:mm:ss") }}</td>
         </tr>

@@ -1,5 +1,8 @@
 <template>
-  <v-app>
+  <v-app v-if="!ready">
+    <Login />
+  </v-app>
+  <v-app v-else>
     <v-navigation-drawer permanent>
       <v-list-item :prepend-avatar="uInfo.avatar" :title="uInfo.email" nav>
         <template v-slot:append>
@@ -25,11 +28,18 @@
 </template>
 
 <script setup lang="ts">
+import Login from "@/components/Login.vue";
 import { ref, onMounted } from 'vue';
-import { GetUserInfo } from '@/../wailsjs/go/relingo/Client';
+import { Ready, GetUserInfo } from '@/../wailsjs/go/relingo/Client';
 
+const ready = ref(false)
 const uInfo = ref<any>({})
 onMounted(async () => {
+  ready.value = await Ready()
+  if(!ready.value){
+    return
+  }
+
   uInfo.value = await GetUserInfo()
 })
 

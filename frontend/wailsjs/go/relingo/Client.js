@@ -18,6 +18,10 @@ export function MasteredWords(arg1) {
   return window['go']['relingo']['Client']['MasteredWords'](arg1);
 }
 
+export function Ready() {
+  return window['go']['relingo']['Client']['Ready']();
+}
+
 export function SetToken(arg1) {
   return window['go']['relingo']['Client']['SetToken'](arg1);
 }

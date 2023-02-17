@@ -16,7 +16,7 @@ type Client struct {
 
 func NewClient() *Client {
 	c := &Client{}
-	c.hc = resty.New().SetBaseURL("https://relingo.net/api").OnBeforeRequest(func(client *resty.Client, request *resty.Request) error {
+	c.hc = resty.New().SetBaseURL("https://api.relingo.net/api").OnBeforeRequest(func(client *resty.Client, request *resty.Request) error {
 		if c.token == "" {
 			return errors.New("empty token")
 		}
@@ -28,6 +28,10 @@ func NewClient() *Client {
 
 func (c *Client) SetToken(token string) {
 	c.token = token
+}
+
+func (c *Client) Ready() bool {
+	return c.token != ""
 }
 
 func (c *Client) GetUserInfo() (*RespUserInfo, error) {
@@ -101,7 +105,6 @@ func (c *Client) SubmitVocabulary(words []string) error {
 	if err != nil {
 		return err
 	}
-	fmt.Println(resp.Request.Body, resp.String())
 
 	return checkResult(resp, result)
 }
@@ -111,7 +114,7 @@ func (c *Client) relingoHeaders() map[string]string {
 		"User-Agent":        "relingo-desktop",
 		"x-relingo-lang":    "cn",
 		"x-relingo-token":   c.token,
-		"x-relingo-version": "2.4.0",
+		"x-relingo-version": "2.5.0",
 	}
 }
 

@@ -3,13 +3,16 @@ package main
 import (
 	"context"
 	"fmt"
+	"io"
 	"log"
+	"os"
 	"time"
 
 	"github.com/bonaysoft/relingo-desktop/pkg/dal/model"
 	"github.com/bonaysoft/relingo-desktop/pkg/dal/query"
 	"github.com/bonaysoft/relingo-desktop/pkg/proxy"
 	"github.com/bonaysoft/relingo-desktop/pkg/relingo"
+	"github.com/wailsapp/wails/v2/pkg/runtime"
 	"gorm.io/gen"
 
 	"github.com/glebarez/sqlite"
@@ -54,13 +57,34 @@ func (a *App) shutdown(ctx context.Context) {
 	_ = a.p.Stop(ctx)
 }
 
+func (a *App) DownloadCert() error {
+	opts := runtime.SaveDialogOptions{
+		DefaultFilename: "ca.pem",
+	}
+	v, err := runtime.SaveFileDialog(a.ctx, opts)
+	if err != nil {
+		return err
+	}
+
+	src, err := os.Open("ca.pem")
+	if err != nil {
+		return err
+	}
+	dist, err := os.Create(v)
+	if err != nil {
+		return err
+	}
+
+	_, err = io.Copy(dist, src)
+	return err
+}
+
 func (a *App) FindNewWords(q string) []*model.Word {
 	date := func(t time.Time) time.Time {
 		y, h, d := t.Date()
 		return time.Date(y, h, d, 0, 0, 0, 0, time.Local)
 	}
 	today := time.Now()
-	fmt.Println(today, date(today))
 	tomorrow := today.Add(time.Hour * 24)
 	yesterday := today.Add(-time.Hour * 24)
 
