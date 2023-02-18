@@ -1,11 +1,16 @@
-# README
+# Relingo Desktop
 
-## About
+这是一个非官方的Relingo桌面客户端，为了统计词频，我们采用了拦截官方插件请求的方式进行实现，所以需要使用SwitchyOmega插件将api.relingo.net的请求代理到本软件的代理端口。
 
-This is the official Wails Vue-TS template.
+## 安装
 
-You can configure the project by editing `wails.json`. More information about the project settings can be found
-here: https://wails.io/docs/reference/project-config
+### MacOS
+
+TODO
+
+### Windows
+
+TODO
 
 ## Live Development
 
