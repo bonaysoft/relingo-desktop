@@ -8,6 +8,8 @@ import (
 	"os"
 	"time"
 
+	egModel "github.com/bonaysoft/engra/apis/graph/model"
+	egClient "github.com/bonaysoft/engra/pkg/client"
 	"github.com/bonaysoft/relingo-desktop/pkg/dal/model"
 	"github.com/bonaysoft/relingo-desktop/pkg/dal/query"
 	"github.com/bonaysoft/relingo-desktop/pkg/proxy"
@@ -30,7 +32,7 @@ type App struct {
 
 // NewApp creates a new App application struct
 func NewApp() *App {
-	gormdb, err := gorm.Open(sqlite.Open("/Users/yanbo/CloudDocs/relingo-desktop/gorm.db"))
+	gormdb, err := gorm.Open(sqlite.Open("gorm.db"))
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -79,7 +81,12 @@ func (a *App) DownloadCert() error {
 	return err
 }
 
-func (a *App) FindNewWords(q string) []*model.Word {
+type ListResult struct {
+	Items []egModel.Result `json:"items"`
+	Total int64            `json:"total"`
+}
+
+func (a *App) FindNewWords(q string, pageNo, pageSize int) *ListResult {
 	date := func(t time.Time) time.Time {
 		y, h, d := t.Date()
 		return time.Date(y, h, d, 0, 0, 0, 0, time.Local)
@@ -100,17 +107,27 @@ func (a *App) FindNewWords(q string) []*model.Word {
 	}
 
 	conds = append(conds, a.query.Word.Mastered.Is(false))
-	words, err := a.query.Word.Where(conds...).Find()
+	qd := a.query.Word.Where(conds...)
+	total, err := qd.Count()
+	words, err := qd.Offset((pageNo - 1) * pageSize).Limit(pageSize).Find()
 	if err != nil {
 		fmt.Println(err)
 		return nil
 	}
 
-	// 查单词
-	// 差词根
-	// 查前缀
+	results := make([]egModel.Result, 0)
+	egc := egClient.NewClient("http://localhost:8081/query")
+	for _, word := range words {
+		resp, err := egClient.Find(egc.WithContext(context.Background()), word.Source)
+		if err != nil {
+			fmt.Println(word.Source, err)
+			continue
+		}
 
-	return words
+		results = append(results, resp.GetVocabulary())
+	}
+
+	return &ListResult{Items: results, Total: total}
 }
 
 func (a *App) SubmitVocabulary(words []string) error {

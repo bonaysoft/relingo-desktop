@@ -3,9 +3,10 @@ module github.com/bonaysoft/relingo-desktop
 go 1.18
 
 require (
+	github.com/bonaysoft/engra v0.0.0-20230222170155-59e5ec0cdb07
 	github.com/glebarez/sqlite v1.6.0
 	github.com/go-resty/resty/v2 v2.7.0
-	github.com/samber/lo v1.27.1
+	github.com/samber/lo v1.37.0
 	github.com/wailsapp/wails/v2 v2.3.1
 	gopkg.in/elazarl/goproxy.v1 v1.0.0-20180725130230-947c36da3153
 	gorm.io/gen v0.3.19
@@ -13,7 +14,10 @@ require (
 	gorm.io/plugin/dbresolver v1.4.0
 )
 
+replace github.com/bonaysoft/engra => ../engra/
+
 require (
+	github.com/Khan/genqlient v0.5.0 // indirect
 	github.com/bep/debounce v1.2.1 // indirect
 	github.com/elazarl/goproxy v0.0.0-20221015165544-a0805db90819 // indirect
 	github.com/elazarl/goproxy/ext v0.0.0-20221015165544-a0805db90819 // indirect
@@ -38,6 +42,7 @@ require (
 	github.com/tkrajina/go-reflector v0.5.5 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.1 // indirect
+	github.com/vektah/gqlparser/v2 v2.5.1 // indirect
 	github.com/wailsapp/mimetype v1.4.1 // indirect
 	golang.org/x/crypto v0.0.0-20221005025214-4161e89ecf1b // indirect
 	golang.org/x/exp v0.0.0-20220303212507-bbda1eaf7a17 // indirect

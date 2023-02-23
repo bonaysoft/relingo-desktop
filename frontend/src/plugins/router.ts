@@ -3,7 +3,7 @@ import {
   createWebHashHistory,
   createWebHistory,
 } from "vue-router";
-import HelloWorldVue from "@/components/HelloWorld.vue";
+import Home from "@/components/Home.vue";
 import Mastered from "@/components/Mastered.vue";
 import Vocabulary from "@/components/Vocabulary.vue";
 import { Ready } from "@/../wailsjs/go/relingo/Client";
@@ -16,7 +16,7 @@ const routes = [
   {
     name: "home",
     path: "/home",
-    component: HelloWorldVue,
+    component: Home,
   },
   {
     name: "words",

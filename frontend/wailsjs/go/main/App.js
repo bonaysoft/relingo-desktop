@@ -6,8 +6,8 @@ export function DownloadCert() {
   return window['go']['main']['App']['DownloadCert']();
 }
 
-export function FindNewWords(arg1) {
-  return window['go']['main']['App']['FindNewWords'](arg1);
+export function FindNewWords(arg1, arg2, arg3) {
+  return window['go']['main']['App']['FindNewWords'](arg1, arg2, arg3);
 }
 
 export function SubmitVocabulary(arg1) {
