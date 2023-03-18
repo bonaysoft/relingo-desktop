@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -53,7 +52,6 @@ func (p *Proxy) Run() error {
 }
 
 func (p *Proxy) Stop(ctx context.Context) (err error) {
-	fmt.Println("Proxy stopped11")
 	return p.srv.Shutdown(ctx)
 }
 
@@ -65,15 +63,16 @@ func (p *Proxy) hookWords(body []byte) {
 	}
 
 	for _, word := range data.Data.Words {
-		w, err := p.query.Word.Where(p.query.Word.Source.Eq(word.Source)).Take()
+		w, err := p.query.Word.Where(p.query.Word.Name.Eq(word.Source)).Take()
 		if err != nil {
-			// return
-			w = &model.Word{Source: word.Source}
+			w = &model.Word{Name: word.Source, RawJSON: word.String()}
 		}
 
 		w.Exposures++
 		w.Mastered = word.Mastered
-		// fmt.Println(word.Source, w.Exposures)
+		if w.RawJSON == "" {
+			w.RawJSON = word.String()
+		}
 		if err := p.query.Word.Where(p.query.Word.Id.Eq(w.Id)).Save(w); err != nil {
 			log.Println(err)
 			return

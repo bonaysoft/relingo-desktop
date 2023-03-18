@@ -11,7 +11,8 @@ import (
 type Client struct {
 	hc *resty.Client
 
-	token string
+	token     string
+	tokenHook func(token string)
 }
 
 func NewClient() *Client {
@@ -26,8 +27,13 @@ func NewClient() *Client {
 	return c
 }
 
+func (c *Client) TokenHook(f func(token string)) {
+	c.tokenHook = f
+}
+
 func (c *Client) SetToken(token string) {
 	c.token = token
+	c.tokenHook(token)
 }
 
 func (c *Client) Ready() bool {
@@ -107,6 +113,22 @@ func (c *Client) SubmitVocabulary(words []string) error {
 	}
 
 	return checkResult(resp, result)
+}
+
+func (c *Client) LockupDict(word string) (*DictItem, error) {
+	data := make([]DictItem, 0)
+	result := NewResponse(data)
+	resp, err := c.hc.R().SetHeaders(c.relingoHeaders()).SetBody(&LockupBody{Text: word, To: "zh"}).SetResult(result).Post("/lookupDict")
+	if err != nil {
+		return nil, err
+	} else if err := checkResult(resp, result); err != nil {
+		return nil, err
+	} else if len(result.Data) == 0 {
+		return nil, errors.New("not found")
+	}
+
+	v := result.Data[0]
+	return &v, nil
 }
 
 func (c *Client) relingoHeaders() map[string]string {

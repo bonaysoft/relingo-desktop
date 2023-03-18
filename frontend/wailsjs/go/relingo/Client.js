@@ -14,6 +14,10 @@ export function GetVocabularyList() {
   return window['go']['relingo']['Client']['GetVocabularyList']();
 }
 
+export function LockupDict(arg1) {
+  return window['go']['relingo']['Client']['LockupDict'](arg1);
+}
+
 export function MasteredWords(arg1) {
   return window['go']['relingo']['Client']['MasteredWords'](arg1);
 }
@@ -28,4 +32,8 @@ export function SetToken(arg1) {
 
 export function SubmitVocabulary(arg1) {
   return window['go']['relingo']['Client']['SubmitVocabulary'](arg1);
+}
+
+export function TokenHook(arg1) {
+  return window['go']['relingo']['Client']['TokenHook'](arg1);
 }

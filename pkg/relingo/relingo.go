@@ -1,9 +1,15 @@
 package relingo
 
-import "time"
+import (
+	"encoding/json"
+	"strings"
+	"time"
+
+	"github.com/samber/lo"
+)
 
 type RD interface {
-	RespUserInfo | RespParseContent2 | Vocabulary | []VocabularyListItem
+	RespUserInfo | RespParseContent2 | Vocabulary | []VocabularyListItem | []DictItem
 }
 
 type Response[Data RD] struct {
@@ -61,12 +67,13 @@ type RespParseContent2 struct {
 }
 
 type Word struct {
-	Phonetic     []string `json:"phonetic"`
-	Variant      []string `json:"variant"`
-	Id           string   `json:"_id"`
-	Source       string   `json:"source"`
-	Display      *string  `json:"display,omitempty"`
-	Translations []struct {
+	Id            string   `json:"_id"`
+	Phonetic      []string `json:"phonetic"`
+	Variant       []string `json:"variant"`
+	WordFrequency int      `json:"wordFrequency"`
+	Source        string   `json:"source"`
+	Display       *string  `json:"display,omitempty"`
+	Translations  []struct {
 		Target string  `json:"target"`
 		Pos    string  `json:"pos"`
 		Score  float64 `json:"score"`
@@ -87,4 +94,42 @@ type Word struct {
 	Revision   bool   `json:"revision"`
 	NeedRevise bool   `json:"needRevise"`
 	Scope      string `json:"scope,omitempty"`
+}
+
+func (w *Word) String() string {
+	b, _ := json.Marshal(w)
+	return string(b)
+}
+
+type LockupBody struct {
+	Text string `json:"text"`
+	To   string `json:"to"`
+}
+
+type DictItem struct {
+	Phonetic      []string      `json:"phonetic"`
+	Variant       []string      `json:"variant"`
+	WordFrequency int           `json:"wordFrequency"`
+	Definition    string        `json:"definition"`
+	Id            string        `json:"_id"`
+	Source        string        `json:"source"`
+	Lang          string        `json:"lang"`
+	Translations  []Translation `json:"translations"`
+	Display       string        `json:"display"`
+	Mastered      bool          `json:"mastered"`
+	Stared        bool          `json:"stared"`
+	// Sentences  []interface{} `json:"sentences"`
+	Revision   bool `json:"revision"`
+	NeedRevise bool `json:"needRevise"`
+}
+
+func (d *DictItem) GetMeanings() string {
+	meanings := lo.Map(d.Translations, func(item Translation, index int) string { return item.Target })
+	return strings.Join(meanings, "；")
+}
+
+type Translation struct {
+	Target string  `json:"target"`
+	Pos    string  `json:"pos"`
+	Score  float64 `json:"score"`
 }

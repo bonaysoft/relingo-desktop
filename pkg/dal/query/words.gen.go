@@ -28,9 +28,10 @@ func newWord(db *gorm.DB, opts ...gen.DOOption) word {
 	tableName := _word.wordDo.TableName()
 	_word.ALL = field.NewAsterisk(tableName)
 	_word.Id = field.NewInt(tableName, "id")
-	_word.Source = field.NewString(tableName, "source")
+	_word.Name = field.NewString(tableName, "source")
 	_word.Exposures = field.NewInt(tableName, "exposures")
 	_word.Mastered = field.NewBool(tableName, "mastered")
+	_word.RawJSON = field.NewString(tableName, "raw_json")
 	_word.CreatedAt = field.NewTime(tableName, "created_at")
 	_word.UpdatedAt = field.NewTime(tableName, "updated_at")
 	_word.DeletedAt = field.NewTime(tableName, "deleted_at")
@@ -45,9 +46,10 @@ type word struct {
 
 	ALL       field.Asterisk
 	Id        field.Int
-	Source    field.String
+	Name      field.String
 	Exposures field.Int
 	Mastered  field.Bool
+	RawJSON   field.String
 	CreatedAt field.Time
 	UpdatedAt field.Time
 	DeletedAt field.Time
@@ -68,9 +70,10 @@ func (w word) As(alias string) *word {
 func (w *word) updateTableName(table string) *word {
 	w.ALL = field.NewAsterisk(table)
 	w.Id = field.NewInt(table, "id")
-	w.Source = field.NewString(table, "source")
+	w.Name = field.NewString(table, "source")
 	w.Exposures = field.NewInt(table, "exposures")
 	w.Mastered = field.NewBool(table, "mastered")
+	w.RawJSON = field.NewString(table, "raw_json")
 	w.CreatedAt = field.NewTime(table, "created_at")
 	w.UpdatedAt = field.NewTime(table, "updated_at")
 	w.DeletedAt = field.NewTime(table, "deleted_at")
@@ -90,11 +93,12 @@ func (w *word) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (w *word) fillFieldMap() {
-	w.fieldMap = make(map[string]field.Expr, 7)
+	w.fieldMap = make(map[string]field.Expr, 8)
 	w.fieldMap["id"] = w.Id
-	w.fieldMap["source"] = w.Source
+	w.fieldMap["source"] = w.Name
 	w.fieldMap["exposures"] = w.Exposures
 	w.fieldMap["mastered"] = w.Mastered
+	w.fieldMap["raw_json"] = w.RawJSON
 	w.fieldMap["created_at"] = w.CreatedAt
 	w.fieldMap["updated_at"] = w.UpdatedAt
 	w.fieldMap["deleted_at"] = w.DeletedAt

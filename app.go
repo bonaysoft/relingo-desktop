@@ -8,10 +8,13 @@ import (
 	"os"
 	"time"
 
+	egClient "github.com/bonaysoft/engra/pkg/client"
+	"github.com/bonaysoft/relingo-desktop/pkg/config"
 	"github.com/bonaysoft/relingo-desktop/pkg/dal/model"
 	"github.com/bonaysoft/relingo-desktop/pkg/dal/query"
 	"github.com/bonaysoft/relingo-desktop/pkg/proxy"
 	"github.com/bonaysoft/relingo-desktop/pkg/relingo"
+	"github.com/bonaysoft/relingo-desktop/pkg/youdao"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 	"gorm.io/gen"
 
@@ -30,7 +33,12 @@ type App struct {
 
 // NewApp creates a new App application struct
 func NewApp() *App {
-	gormdb, err := gorm.Open(sqlite.Open("/Users/yanbo/CloudDocs/relingo-desktop/gorm.db"))
+	cfg, err := config.NewConfig()
+	if err != nil {
+		log.Println(err)
+	}
+
+	gormdb, err := gorm.Open(sqlite.Open(cfg.GetDBPath()))
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -39,6 +47,8 @@ func NewApp() *App {
 
 	q := query.Use(gormdb.Debug())
 	rc := relingo.NewClient()
+	rc.TokenHook(cfg.SaveToken)
+	rc.SetToken(cfg.GetToken())
 	return &App{
 		query: q,
 		rc:    rc,
@@ -79,7 +89,14 @@ func (a *App) DownloadCert() error {
 	return err
 }
 
-func (a *App) FindNewWords(q string) []*model.Word {
+type Word model.Word
+
+type ListResult struct {
+	Items []Word `json:"items"`
+	Total int64  `json:"total"`
+}
+
+func (a *App) FindNewWords(q string, pageNo, pageSize int) *ListResult {
 	date := func(t time.Time) time.Time {
 		y, h, d := t.Date()
 		return time.Date(y, h, d, 0, 0, 0, 0, time.Local)
@@ -100,17 +117,27 @@ func (a *App) FindNewWords(q string) []*model.Word {
 	}
 
 	conds = append(conds, a.query.Word.Mastered.Is(false))
-	words, err := a.query.Word.Where(conds...).Find()
+	qd := a.query.Word.Where(conds...)
+	total, err := qd.Count()
+	words, err := qd.Offset((pageNo - 1) * pageSize).Limit(pageSize).Find()
 	if err != nil {
 		fmt.Println(err)
 		return nil
 	}
 
-	// 查单词
-	// 差词根
-	// 查前缀
+	egc := egClient.NewClient("http://localhost:8081/query")
+	items := make([]Word, 0)
+	for _, word := range words {
+		resp, _ := egClient.Find(egc.WithContext(context.Background()), word.Name)
+		if resp != nil {
+			word.Root = resp.GetVocabulary()
+		}
 
-	return words
+		word.RawObject = word.ParseRawJSON()
+		items = append(items, Word(*word))
+	}
+
+	return &ListResult{Items: items, Total: total}
 }
 
 func (a *App) SubmitVocabulary(words []string) error {
@@ -118,7 +145,7 @@ func (a *App) SubmitVocabulary(words []string) error {
 		return err
 	}
 
-	rows, err := a.query.Word.Where(a.query.Word.Source.In(words...)).Find()
+	rows, err := a.query.Word.Where(a.query.Word.Name.In(words...)).Find()
 	if err != nil {
 		return err
 	}
@@ -127,13 +154,15 @@ func (a *App) SubmitVocabulary(words []string) error {
 		row.Mastered = true
 	}
 
-	return a.query.Word.Where(a.query.Word.Source.In(words...)).Save(rows...)
+	return a.query.Word.Where(a.query.Word.Name.In(words...)).Save(rows...)
 }
 
 func (a *App) getBinds() []interface{} {
 	return []interface{}{
 		a,
 		a.rc,
+		&model.Word{},
+		youdao.NewClient(),
 	}
 }
 
