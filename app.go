@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"fmt"
 	"io"
@@ -76,16 +77,12 @@ func (a *App) DownloadCert() error {
 		return err
 	}
 
-	src, err := os.Open("ca.pem")
-	if err != nil {
-		return err
-	}
 	dist, err := os.Create(v)
 	if err != nil {
 		return err
 	}
 
-	_, err = io.Copy(dist, src)
+	_, err = io.Copy(dist, bytes.NewReader(proxy.GetCert()))
 	return err
 }
 
