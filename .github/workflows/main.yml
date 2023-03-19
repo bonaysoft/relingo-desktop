@@ -34,7 +34,6 @@ jobs:
       - name: setup wails
         run: | 
           go install github.com/wailsapp/wails/v2/cmd/wails@v2.3.1
-          npm install --global create-dmg
       - name: Build Wails app
         run: |
           wails build -platform ${{ matrix.target }}
@@ -52,8 +51,10 @@ jobs:
           windows/*)
             7z -y a relingo-desktop-${{ steps.extract_tag.outputs.tag }}-${{ matrix.build_target }}.zip relingo-desktop.exe
             sha256sum relingo-desktop-${{ steps.extract_tag.outputs.tag }}-${{ matrix.build_target }}.zip > relingo-desktop-${{ steps.extract_tag.outputs.tag }}-${{ matrix.build_target }}.sha256
+            rm relingo-desktop.exe
             ;;
           *)
+            npm install --global create-dmg
             create-dmg Relingo.app
             mv Relingo ${{ steps.extract_tag.outputs.tag }}.dmg relingo-desktop-${{ steps.extract_tag.outputs.tag }}-${{ matrix.build_target }}.dmg
             sha256sum relingo-desktop-${{ steps.extract_tag.outputs.tag }}-${{ matrix.build_target }}.dmg > relingo-desktop-${{ steps.extract_tag.outputs.tag }}-${{ matrix.build_target }}.sha256
@@ -63,6 +64,4 @@ jobs:
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: |
-            build/bin/*.zip
-            build/bin/*.dmg
+          files: build/bin/*
