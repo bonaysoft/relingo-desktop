@@ -1,14 +1,68 @@
-name: build-release
-
+name: "main"
 on:
   push:
   pull_request:
 
 jobs:
-  general-ci:
-    uses: saltbo/actions/.github/workflows/general-ci.yml@master
-    with:
-      project-name: relingo-desktop
-      project-src: .
-      language: wails
-      release-binary: true
+  package:
+    strategy:
+      fail-fast: false
+      matrix:
+        build_target: [macos-arm64, macos-x86_64, windows-x86_64]
+        go-version: [1.18]
+        include:
+          - build_target: macos-arm64
+            target: darwin/arm64
+            os: macos-latest
+          - build_target: macos-x86_64
+            target: darwin/amd64
+            os: macos-latest
+          - build_target: windows-x86_64
+            target: windows/amd64
+            os: windows-latest
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ matrix.go-version }}
+      - name: setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+      - name: setup wails
+        run: | 
+          go install github.com/wailsapp/wails/v2/cmd/wails@v2.3.1
+          npm install --global create-dmg
+      - name: Build Wails app
+        run: |
+          wails build -platform ${{ matrix.target }}
+      - name: Extract git tag
+        shell: bash
+        run: echo "##[set-output name=tag;]$(echo ${GITHUB_REF#refs/tags/})"
+        id: extract_tag
+      - name: Packaging assets
+        shell: bash
+        if: startsWith(github.ref, 'refs/tags/')
+        continue-on-error: true
+        run: |
+          cd build/bin/
+          case ${{ matrix.target }} in
+          windows/*)
+            7z -y a relingo-desktop-${{ steps.extract_tag.outputs.tag }}-${{ matrix.build_target }}.zip relingo-desktop.exe
+            sha256sum relingo-desktop-${{ steps.extract_tag.outputs.tag }}-${{ matrix.build_target }}.zip > relingo-desktop-${{ steps.extract_tag.outputs.tag }}-${{ matrix.build_target }}.sha256
+            ;;
+          *)
+            create-dmg Relingo.app
+            mv Relingo ${{ steps.extract_tag.outputs.tag }}.dmg relingo-desktop-${{ steps.extract_tag.outputs.tag }}-${{ matrix.build_target }}.dmg
+            sha256sum relingo-desktop-${{ steps.extract_tag.outputs.tag }}-${{ matrix.build_target }}.dmg > relingo-desktop-${{ steps.extract_tag.outputs.tag }}-${{ matrix.build_target }}.sha256
+            ;;
+          esac;
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            build/bin/*.zip
+            build/bin/*.dmg
