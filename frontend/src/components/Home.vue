@@ -55,7 +55,7 @@ console.log(111, route.path, route.query);
                   </span>
                 </v-card-title>
                 <v-card-subtitle>
-                  <v-chip class="mr-2" size="x-small" v-for="tag in word.root.self?.tags"> {{ tag }} </v-chip>
+                  <v-chip class="mr-2" size="x-small" v-for="tag in word.engra_data?.tags"> {{ tag }} </v-chip>
                 </v-card-subtitle>
               </v-card-item>
 
@@ -64,7 +64,7 @@ console.log(111, route.path, route.query);
                   {{ word.raw_object?.translations.map(el => el.target).join('；') }}
                 </div>
 
-                <div>{{ word.root?.self?.mnemonic }}</div>
+                <div>{{ word.engra_data?.mnemonic }}</div>
               </v-card-text>
 
               <v-card-actions>

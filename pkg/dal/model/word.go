@@ -15,7 +15,7 @@ type Word struct {
 	Mastered  bool             `json:"mastered"`
 	RawJSON   string           `json:"raw_json"`
 	RawObject relingo.DictItem `json:"raw_object" gorm:"-"`
-	Root      model.Result     `json:"root" gorm:"-"`
+	EngraData model.Vocabulary `json:"engra_data" gorm:"-"`
 	CreatedAt time.Time        `json:"created_at"`
 	UpdatedAt time.Time        `json:"updated_at"`
 	DeletedAt time.Time        `json:"deleted_at"`

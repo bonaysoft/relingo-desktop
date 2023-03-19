@@ -3,7 +3,7 @@ module github.com/bonaysoft/relingo-desktop
 go 1.18
 
 require (
-	github.com/bonaysoft/engra v0.0.0-20230222170155-59e5ec0cdb07
+	github.com/bonaysoft/engra/apis v0.0.0-20230319055702-e3b14bbe2fdf
 	github.com/glebarez/sqlite v1.6.0
 	github.com/go-resty/resty/v2 v2.7.0
 	github.com/samber/lo v1.37.0
@@ -14,8 +14,6 @@ require (
 	gorm.io/gorm v1.24.3
 	gorm.io/plugin/dbresolver v1.4.0
 )
-
-replace github.com/bonaysoft/engra => ../engra/
 
 require (
 	github.com/Khan/genqlient v0.5.0 // indirect

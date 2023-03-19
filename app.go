@@ -9,13 +9,15 @@ import (
 	"os"
 	"time"
 
-	egClient "github.com/bonaysoft/engra/pkg/client"
+	egClient "github.com/bonaysoft/engra/apis/client"
+	egModel "github.com/bonaysoft/engra/apis/graph/model"
 	"github.com/bonaysoft/relingo-desktop/pkg/config"
 	"github.com/bonaysoft/relingo-desktop/pkg/dal/model"
 	"github.com/bonaysoft/relingo-desktop/pkg/dal/query"
 	"github.com/bonaysoft/relingo-desktop/pkg/proxy"
 	"github.com/bonaysoft/relingo-desktop/pkg/relingo"
 	"github.com/bonaysoft/relingo-desktop/pkg/youdao"
+	"github.com/samber/lo"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 	"gorm.io/gen"
 
@@ -123,11 +125,15 @@ func (a *App) FindNewWords(q string, pageNo, pageSize int) *ListResult {
 	}
 
 	egc := egClient.NewClient("http://localhost:8081/query")
+	resp, err := egClient.Lookup(egc.WithContext(context.Background()), lo.Map(words, func(item *model.Word, index int) string { return item.Name }))
+	egvMaps := lo.SliceToMap(resp.Vocabularies, func(item egModel.Vocabulary) (string, egModel.Vocabulary) {
+		return item.Name, item
+	})
+
 	items := make([]Word, 0)
 	for _, word := range words {
-		resp, _ := egClient.Find(egc.WithContext(context.Background()), word.Name)
-		if resp != nil {
-			word.Root = resp.GetVocabulary()
+		if v, ok := egvMaps[word.Name]; ok {
+			word.EngraData = v
 		}
 
 		word.RawObject = word.ParseRawJSON()
