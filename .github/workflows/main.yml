@@ -55,8 +55,9 @@ jobs:
             ;;
           *)
             npm install --global create-dmg
-            create-dmg Relingo.app
-            mv Relingo ${{ steps.extract_tag.outputs.tag }}.dmg relingo-desktop-${{ steps.extract_tag.outputs.tag }}-${{ matrix.build_target }}.dmg
+            set -e
+            create-dmg Relingo.app || true
+            mv *.dmg relingo-desktop-${{ steps.extract_tag.outputs.tag }}-${{ matrix.build_target }}.dmg
             sha256sum relingo-desktop-${{ steps.extract_tag.outputs.tag }}-${{ matrix.build_target }}.dmg > relingo-desktop-${{ steps.extract_tag.outputs.tag }}-${{ matrix.build_target }}.sha256
             ;;
           esac;
