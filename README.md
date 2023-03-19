@@ -52,6 +52,6 @@
 - [Telegram](https://t.me/relingodesktop)
 
 ## 🖼️ 截图
+<img width="1024" alt="image" src="https://user-images.githubusercontent.com/17308208/226175526-b7d1569d-cc90-42bb-9301-51e3162dbad0.png">
 
-<img width="1024" alt="image" src="https://user-images.githubusercontent.com/17308208/226173782-ba597df0-559d-4bba-88a8-d73d99e312ca.png">
 
