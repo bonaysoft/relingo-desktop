@@ -1,0 +1,13 @@
+name: build-release
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  general-ci:
+    uses: saltbo/actions/.github/workflows/general-ci.yml@master
+    with:
+      project-src: .
+      language: wails
+      release-binary: true
