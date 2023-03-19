@@ -8,7 +8,7 @@
 这是一个非官方的[Relingo](https://relingo.net/)桌面客户端，主要用于背单词。
 
 <a href="#%EF%B8%8F-安装" target="blank"><strong>📦️ 下载安装包</strong></a>&nbsp;&nbsp;|&nbsp;&nbsp;
-<a href="https://t.me/relingodesktop" target="blank"><strong>💬 加入交流群</strong></a>
+<a href="https://t.me/relingodesktop" target="_blank"><strong>💬 加入交流群</strong></a>
 
 ## ✨ 特性
 
