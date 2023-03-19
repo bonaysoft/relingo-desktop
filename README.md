@@ -5,7 +5,7 @@
 [![](https://img.shields.io/github/v/release/bonaysoft/relingo-desktop.svg)](https://github.com/bonaysoft/relingo-desktop/releases)
 [![](https://img.shields.io/github/license/bonaysoft/relingo-desktop.svg)](https://github.com/bonaysoft/relingo-desktop/blob/master/LICENSE)
 
-这是一个非官方的Relingo桌面客户端，主要用于背单词。
+这是一个非官方的[Relingo](https://relingo.net/)桌面客户端，主要用于背单词。
 
 ## ✨ 特性
 
