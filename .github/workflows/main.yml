@@ -8,8 +8,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        build_target: [macos-arm64, macos-x86_64, windows-x86_64]
-        go-version: [1.18]
+        build_target: [ macos-arm64, macos-x86_64, windows-x86_64 ]
+        go-version: [ 1.18 ]
         include:
           - build_target: macos-arm64
             target: darwin/arm64
@@ -32,11 +32,16 @@ jobs:
         with:
           node-version: 14
       - name: setup wails
-        run: | 
+        run: |
           go install github.com/wailsapp/wails/v2/cmd/wails@v2.3.1
       - name: Build Wails app
         run: |
           wails build -platform ${{ matrix.target }}
+      - name: upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: relingo-desktop-${{ matrix.build_target }}
+          path: build/bin/*
       - name: Extract git tag
         shell: bash
         run: echo "##[set-output name=tag;]$(echo ${GITHUB_REF#refs/tags/})"
