@@ -8,11 +8,11 @@ export namespace main {
 	    raw_json: string;
 	    raw_object: relingo.DictItem;
 	    engra_data: model.Vocabulary;
-	    // Go type: time.Time
+	    // Go type: time
 	    created_at: any;
-	    // Go type: time.Time
+	    // Go type: time
 	    updated_at: any;
-	    // Go type: time.Time
+	    // Go type: time
 	    deleted_at: any;
 	
 	    static createFrom(source: any = {}) {
@@ -232,7 +232,7 @@ export namespace relingo {
 	    name: string;
 	    id: string;
 	    type: string;
-	    // Go type: time.Time
+	    // Go type: time
 	    createdAt?: any;
 	    updatedAt?: number;
 	    privilege?: string;
