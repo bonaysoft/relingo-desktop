@@ -39,6 +39,7 @@ func NewApp() *App {
 	cfg, err := config.NewConfig()
 	if err != nil {
 		log.Println(err)
+		return nil
 	}
 
 	gormdb, err := gorm.Open(sqlite.Open(cfg.GetDBPath()))

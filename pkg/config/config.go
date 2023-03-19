@@ -19,7 +19,9 @@ func NewConfig() (*Config, error) {
 	}
 	cfgPath := filepath.Join(cfgDir, "relingo-desktop")
 	if _, err := os.Stat(cfgPath); err != nil {
-		return nil, os.Mkdir(cfgPath, 0755)
+		if err := os.Mkdir(cfgPath, 0755); err != nil {
+			return nil, err
+		}
 	}
 
 	v := viper.New()
