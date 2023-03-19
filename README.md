@@ -23,8 +23,8 @@
 ## ⚙️ 使用
 
 1. 首次运行软件会提示下载证书
-2. 下载证书后进行信任操作
-3. 通过SwitchyOmega插件或者Clash规则将api.relingo.net的请求代理到本软件的代理端口8119
+2. 下载证书后，打开证书进行信任操作
+3. 通过[SwitchyOmega](https://chrome.google.com/webstore/detail/proxy-switchyomega/padekgcemlokbadohgkifijomclgjgif?hl=en)插件或者Clash规则将api.relingo.net的请求代理到本软件的代理端口8119
 4. 刷新任意页面触发relingo插件的加载
 
 ## FAQ
