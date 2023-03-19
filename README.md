@@ -1,5 +1,10 @@
 # Relingo Desktop
 
+[![main](https://github.com/bonaysoft/relingo-desktop/actions/workflows/main.yml/badge.svg)](https://github.com/bonaysoft/relingo-desktop/actions/workflows/main.yml)
+[![](https://img.shields.io/github/downloads/bonaysoft/relingo-desktop/total.svg)](https://github.com/bonaysoft/relingo-desktop/releases)
+[![](https://img.shields.io/github/v/release/bonaysoft/relingo-desktop.svg)](https://github.com/bonaysoft/relingo-desktop/releases)
+[![](https://img.shields.io/github/license/bonaysoft/relingo-desktop.svg)](https://github.com/bonaysoft/relingo-desktop/blob/master/LICENSE)
+
 这是一个非官方的Relingo桌面客户端，主要用于背单词。
 
 ## ✨ 特性
@@ -44,3 +49,6 @@
 基于 Apache-2.0 license 许可进行开源。
 
 ## 🖼️ 截图
+
+<img width="1024" alt="image" src="https://user-images.githubusercontent.com/17308208/226173782-ba597df0-559d-4bba-88a8-d73d99e312ca.png">
+
