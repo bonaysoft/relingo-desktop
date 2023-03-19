@@ -8,6 +8,7 @@ jobs:
   general-ci:
     uses: saltbo/actions/.github/workflows/general-ci.yml@master
     with:
+      project-name: relingo-desktop
       project-src: .
       language: wails
       release-binary: true
