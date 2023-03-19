@@ -13,10 +13,10 @@ jobs:
         include:
           - build_target: macos-arm64
             target: darwin/arm64
-            os: macos-latest
+            os: macos-11
           - build_target: macos-x86_64
             target: darwin/amd64
-            os: macos-latest
+            os: macos-11
           - build_target: windows-x86_64
             target: windows/amd64
             os: windows-latest
