@@ -48,6 +48,9 @@
 
 基于 Apache-2.0 license 许可进行开源。
 
+## 联系我们
+- [Telegram](https://t.me/relingodesktop)
+
 ## 🖼️ 截图
 
 <img width="1024" alt="image" src="https://user-images.githubusercontent.com/17308208/226173782-ba597df0-559d-4bba-88a8-d73d99e312ca.png">

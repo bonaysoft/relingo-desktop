@@ -58,7 +58,7 @@ jobs:
             set -e
             create-dmg Relingo.app || true
             mv *.dmg relingo-desktop-${{ steps.extract_tag.outputs.tag }}-${{ matrix.build_target }}.dmg
-            sha256sum relingo-desktop-${{ steps.extract_tag.outputs.tag }}-${{ matrix.build_target }}.dmg > relingo-desktop-${{ steps.extract_tag.outputs.tag }}-${{ matrix.build_target }}.sha256
+            shasum -a 256 relingo-desktop-${{ steps.extract_tag.outputs.tag }}-${{ matrix.build_target }}.dmg > relingo-desktop-${{ steps.extract_tag.outputs.tag }}-${{ matrix.build_target }}.sha256
             ;;
           esac;
       - name: Release
