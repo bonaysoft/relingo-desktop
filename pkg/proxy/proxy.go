@@ -3,6 +3,7 @@ package proxy
 import (
 	"bytes"
 	"context"
+	"crypto/tls"
 	"encoding/json"
 	"io"
 	"log"
@@ -30,6 +31,12 @@ func NewProxy(query *query.Query, rc *relingo.Client) *Proxy {
 }
 
 func (p *Proxy) Run() error {
+	var caErr error
+	goproxy.GoproxyCa, caErr = tls.X509KeyPair(ca, caKey)
+	if caErr != nil {
+		return caErr
+	}
+
 	proxy := goproxy.NewProxyHttpServer()
 	proxy.OnRequest().HandleConnect(goproxy.AlwaysMitm)
 	proxy.OnRequest(goproxy.ReqHostIs("api.relingo.net:443")).DoFunc(func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
