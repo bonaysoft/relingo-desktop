@@ -7,6 +7,9 @@
 
 这是一个非官方的[Relingo](https://relingo.net/)桌面客户端，主要用于背单词。
 
+<a href="#%EF%B8%8F-安装" target="blank"><strong>📦️ 下载安装包</strong></a>&nbsp;&nbsp;|&nbsp;&nbsp;
+<a href="https://t.me/relingodesktop" target="blank"><strong>💬 加入交流群</strong></a>
+
 ## ✨ 特性
 
 - 生词词频统计
@@ -47,9 +50,6 @@
 本项目仅供个人学习使用，禁止用于商业用途。
 
 基于 Apache-2.0 license 许可进行开源。
-
-## 联系我们
-- [Telegram](https://t.me/relingodesktop)
 
 ## 🖼️ 截图
 <img width="1024" alt="image" src="https://user-images.githubusercontent.com/17308208/226175526-b7d1569d-cc90-42bb-9301-51e3162dbad0.png">
