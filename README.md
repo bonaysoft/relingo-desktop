@@ -23,11 +23,14 @@
 
 访问本项目的 [Releases](https://github.com/bonaysoft/relingo-desktop/releases) 页面下载安装包。
 
+- macOS 用户可以通过 Homebrew 来安装：`brew install --cask saltbo/bin/relingo`
+
 ## ⚙️ 使用
 
 1. 首次运行软件会提示下载证书
 2. 下载证书后，打开证书进行信任操作
-3. 通过[SwitchyOmega](https://chrome.google.com/webstore/detail/proxy-switchyomega/padekgcemlokbadohgkifijomclgjgif?hl=en)插件或者Clash规则将api.relingo.net的请求代理到本软件的代理端口8119
+3. 通过 [SwitchyOmega](https://chrome.google.com/webstore/detail/proxy-switchyomega/padekgcemlokbadohgkifijomclgjgif?hl=en)
+插件或者Clash规则将api.relingo.net的请求代理到本软件的代理端口8119
 4. 刷新任意页面触发relingo插件的加载
 
 ## FAQ
@@ -52,6 +55,7 @@
 基于 Apache-2.0 license 许可进行开源。
 
 ## 🖼️ 截图
+
 <img width="1024" alt="image" src="https://user-images.githubusercontent.com/17308208/226175526-b7d1569d-cc90-42bb-9301-51e3162dbad0.png">
 
 
