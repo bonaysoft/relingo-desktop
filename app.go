@@ -73,7 +73,7 @@ func (a *App) shutdown(ctx context.Context) {
 
 func (a *App) DownloadCert() error {
 	opts := runtime.SaveDialogOptions{
-		DefaultFilename: "ca.pem",
+		DefaultFilename: "relingo-desktop.crt",
 	}
 	v, err := runtime.SaveFileDialog(a.ctx, opts)
 	if err != nil {
