@@ -22,8 +22,8 @@ func main() {
 	// Create application with options
 	err := wails.Run(&options.App{
 		Title:  "Relingo Desktop",
-		Width:  1024,
-		Height: 768,
+		Width:  1200,
+		Height: 800,
 		Mac: &mac.Options{
 			About: &mac.AboutInfo{
 				Title:   "Relingo Desktop",

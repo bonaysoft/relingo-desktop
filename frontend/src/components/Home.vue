@@ -5,16 +5,23 @@ import { FindNewWords, SubmitVocabulary } from '../../wailsjs/go/main/App'
 import { Play } from '../../wailsjs/go/youdao/Client'
 import { main, model } from '../../wailsjs/go/models';
 
+const dateTabs = ref<any[]>([
+  { label: "今日生词", value: 'today' },
+  { label: "昨日生词", value: 'yesterday' },
+  { label: "本周生词", value: 'weekly' },
+  { label: "全部生词", value: 'all' }
+])
+const total = ref<number>()
 const page = ref({ pageNo: 1, pageSize: 6, total: 0 })
 const words = ref<main.Word[]>([])
 const currentTab = ref<any>('today')
 const refresh = () => {
   const { pageNo, pageSize } = page.value
   FindNewWords(currentTab.value, pageNo, pageSize).then((result: main.ListResult) => {
-    console.log(result, 111);
     words.value = result.items
+    total.value = result.total
     page.value.pageNo = pageNo
-    page.value.total = result.total / pageSize
+    page.value.total = Math.round(result.total / pageSize)
   })
 }
 
@@ -28,14 +35,16 @@ const play = async (word: string) => {
 
 onMounted(refresh)
 watch(currentTab, refresh)
-
-const route = useRoute()
-console.log(111, route.path, route.query);
-
 </script>
 
 <template>
   <main>
+    <div>
+      <v-tabs v-model="currentTab" bg-color="primary">
+        <v-tab v-for="(v, idx) in dateTabs" :key="idx" :value="v.value">{{ v.label }}</v-tab>
+        <span style="position: absolute;right: 10px;top: 13px"> {{ total }}</span>
+      </v-tabs>
+    </div>
     <div>
       <v-container fluid>
         <v-row dense>
@@ -68,6 +77,9 @@ console.log(111, route.path, route.query);
               </v-card-text>
 
               <v-card-actions>
+                <div class="counter">
+                  <span>累计出现 {{ word.exposures }} 次</span>
+                </div>
                 <v-spacer></v-spacer>
                 <v-btn size="small" color="surface-variant" variant="text" icon="mdi-check-all"
                   @click="submitVocabulary([word.name || ''])"></v-btn>
@@ -84,4 +96,11 @@ console.log(111, route.path, route.query);
   </main>
 </template>
 
-<style scoped></style>
+<style scoped>
+.counter {
+  font-size: 12px;
+  color: #c9c9c9;
+  font-weight: 500;
+  margin-left: 10px;
+}
+</style>
