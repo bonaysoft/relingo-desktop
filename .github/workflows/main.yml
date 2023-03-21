@@ -71,12 +71,13 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: build/bin/*
-      - name: Update Homebrew cask
-        uses: macauley/action-homebrew-bump-cask@v1
-        if: startsWith(github.ref, 'refs/tags/')
+  homebrewBump:
+    runs-on: macos-12
+    needs: package
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - uses: saltbo/bump-homebrew-cask-action@main
         with:
-          token: ${{secrets.PAT}}
+          token: ${{ secrets.PAT }}
           tap: saltbo/homebrew-bin
-          cask: relingo
-          tag: ${{github.ref}}
-          revision: ${{github.sha}}
+          package: relingo
