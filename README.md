@@ -56,6 +56,6 @@
 
 ## 🖼️ 截图
 
-<img width="1024" alt="image" src="https://user-images.githubusercontent.com/17308208/226175526-b7d1569d-cc90-42bb-9301-51e3162dbad0.png">
+<img width="1200" alt="image" src="https://user-images.githubusercontent.com/17308208/226649056-e35049e3-f406-4ebf-a59b-aa25004daf18.png">
 
 
