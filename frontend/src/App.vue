@@ -12,39 +12,16 @@
 
       <v-divider></v-divider>
 
-      <!-- <v-list density="compact" nav>
-      </v-list> -->
-
       <v-list>
-
-        <v-list-group value="Users">
+        <v-list-group>
           <template v-slot:activator="{ props }">
-            <v-list-item v-bind="props" prepend-icon="mdi-home-city" title="我的生词" value="home"></v-list-item>
+            <v-list-item v-bind="props" prepend-icon="mdi-home-city" title="背单词"></v-list-item>
           </template>
-          <v-list-item title="今日生词" value="today" :to="{ name: 'home', query: { type: 'today' } }"></v-list-item>
-          <v-list-item title="昨日生词" value="yesterday" :to="{ name: 'home', query: { type: 'yesterday' } }"></v-list-item>
-          <v-list-item title="本周生词" value="weekly" :to="{ name: 'home', query: { type: 'weekly' } }"></v-list-item>
-          <v-list-item title="全部生词" value="all" :to="{ name: 'home', query: { type: 'all' } }"></v-list-item>
+          <v-list-item title="未掌握" value="unmastered" to="home"></v-list-item>
+          <v-list-item title="已掌握" value="mastered" to="mastered"></v-list-item>
         </v-list-group>
-        <v-list-group value="NewWords">
-          <template v-slot:activator="{ props }">
-            <v-list-item v-bind="props" prepend-icon="mdi-home-city" title="全部单词" value="words" to="words"></v-list-item>
-          </template>
-
-          <!-- <v-list-item title="今日生词" value="today" to="words"></v-list-item>
-          <v-list-item title="昨日生词" value="yesterday" to="mastered"></v-list-item>
-          <v-list-item title="本周生词" value="weekly" to="mastered"></v-list-item>
-          <v-list-item title="全部生词" value="all" to="mastered"></v-list-item> -->
-        </v-list-group>
-        <v-list-group value="MasteredWords">
-          <template v-slot:activator="{ props }">
-            <v-list-item v-bind="props" prepend-icon="mdi-home-city" title="已掌握单词" value="mastered"
-              to="mastered"></v-list-item>
-          </template>
-
-          <v-list-item title="最近掌握" value="account" to="mastered"></v-list-item>
-          <v-list-item title="需要复习" value="users" to="mastered"></v-list-item>
-        </v-list-group>
+        <v-list-item prepend-icon="mdi-home-city" title="单词本" value="words" to="words"></v-list-item>
+        <!-- <v-list-item prepend-icon="mdi-cog" title="设置" value="settings" to="settings"></v-list-item> -->
       </v-list>
     </v-navigation-drawer>
 

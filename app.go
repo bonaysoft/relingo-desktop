@@ -73,7 +73,7 @@ func (a *App) shutdown(ctx context.Context) {
 
 func (a *App) DownloadCert() error {
 	opts := runtime.SaveDialogOptions{
-		DefaultFilename: "ca.pem",
+		DefaultFilename: "relingo-desktop.crt",
 	}
 	v, err := runtime.SaveFileDialog(a.ctx, opts)
 	if err != nil {
@@ -119,7 +119,7 @@ func (a *App) FindNewWords(q string, pageNo, pageSize int) *ListResult {
 	conds = append(conds, a.query.Word.Mastered.Is(false))
 	qd := a.query.Word.Where(conds...)
 	total, err := qd.Count()
-	words, err := qd.Offset((pageNo - 1) * pageSize).Limit(pageSize).Find()
+	words, err := qd.Offset((pageNo - 1) * pageSize).Limit(pageSize).Order(a.query.Word.Exposures.Desc()).Find()
 	if err != nil {
 		fmt.Println(err)
 		return nil
