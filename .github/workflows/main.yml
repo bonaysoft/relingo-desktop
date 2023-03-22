@@ -23,6 +23,10 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
+      - name: Extract git tag
+        shell: bash
+        run: echo "##[set-output name=tag;]$(echo ${GITHUB_REF#refs/tags/})"
+        id: extract_tag
       - name: Install Go
         uses: actions/setup-go@v2
         with:
@@ -36,7 +40,7 @@ jobs:
           go install github.com/wailsapp/wails/v2/cmd/wails@v2.4.0
       - name: Build Wails app
         run: |
-          wails build -platform ${{ matrix.target }}
+          wails build -platform ${{ matrix.target }} -ldflags "-X main.version=${{ steps.extract_tag.outputs.tag }}"
       - name: Import macOS Certificates
         if: startsWith(matrix.os, 'macos')
         uses: apple-actions/import-codesign-certs@v2
@@ -52,10 +56,6 @@ jobs:
         with:
           name: relingo-desktop-${{ matrix.build_target }}
           path: build/bin/*
-      - name: Extract git tag
-        shell: bash
-        run: echo "##[set-output name=tag;]$(echo ${GITHUB_REF#refs/tags/})"
-        id: extract_tag
       - name: Packaging assets
         shell: bash
         if: startsWith(github.ref, 'refs/tags/')
