@@ -15,6 +15,8 @@ var assets embed.FS
 //go:embed build/appicon.png
 var icon []byte
 
+var version string
+
 func main() {
 	// Create an instance of the app structure
 	app := NewApp()
@@ -27,7 +29,7 @@ func main() {
 		Mac: &mac.Options{
 			About: &mac.AboutInfo{
 				Title:   "Relingo Desktop",
-				Message: "© 2022 Bonaysoft",
+				Message: "\nVersion. " + version + "\n\nCopyright © 2022-2023 Bonaysoft.",
 				Icon:    icon,
 			},
 		},
