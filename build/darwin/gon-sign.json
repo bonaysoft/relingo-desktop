@@ -1,0 +1,15 @@
+{
+  "source": ["./build/bin/Relingo.app"],
+  "bundle_id": "com.wails.Relingo",
+  "apple_id": {
+    "username": "yb1225@qq.com",
+    "password": "@env:APPLE_PASSWORD"
+  },
+  "sign": {
+    "application_identity": "Bonaysoft"
+  },
+  "dmg" :{
+    "output_path":  "relingo-desktop.dmg",
+    "volume_name":  "Relingo"
+  }
+}
