@@ -5,4 +5,6 @@ export function DownloadCert():Promise<void>;
 
 export function FindNewWords(arg1:string,arg2:number,arg3:number):Promise<any>;
 
+export function GetRootByName(arg1:string):Promise<any>;
+
 export function SubmitVocabulary(arg1:Array<string>):Promise<void>;
