@@ -144,6 +144,16 @@ func (a *App) FindNewWords(q string, pageNo, pageSize int) *ListResult {
 	return &ListResult{Items: items, Total: total}
 }
 
+func (a *App) GetRootByName(word string) (*egModel.Vocabulary, error) {
+	egc := egClient.NewClient("http://localhost:8081/query")
+	resp, err := egClient.LookupRoot(egc.WithContext(context.Background()), word)
+	if err != nil {
+		return nil, err
+	}
+
+	return &resp.VocabularyRootTree, nil
+}
+
 func (a *App) SubmitVocabulary(words []string) error {
 	if err := a.rc.SubmitVocabulary(words); err != nil {
 		return err

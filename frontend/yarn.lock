@@ -558,6 +558,11 @@ is-number@^7.0.0:
   resolved "https://registry.npmmirror.com/is-number/-/is-number-7.0.0.tgz#7535345b896734d5f80c4d06c50955527a14f12b"
   integrity sha512-41Cifkg6e8TylSpdtTpeLVMqvSBEVzTttHvERD741+pnZ8ANv0004MRL43QKPDlK9cGvNp6NZWZUBlbGXYxxng==
 
+jsmind@^0.5.3:
+  version "0.5.3"
+  resolved "https://registry.npmmirror.com/jsmind/-/jsmind-0.5.3.tgz#270577d0b90257cf21d584c0d9bb9b6beafe519a"
+  integrity sha512-mQjPxKOu2/s6O3cTG5DpIiukueBail0jA9FRr0vKIMInn7sn6YF8n9TvktGskMVYimmPF9DbXZNxL+UXfMSgDg==
+
 local-pkg@^0.4.2:
   version "0.4.3"
   resolved "https://registry.npmmirror.com/local-pkg/-/local-pkg-0.4.3.tgz#0ff361ab3ae7f1c19113d9bb97b98b905dbc4963"

@@ -10,6 +10,10 @@ export function FindNewWords(arg1, arg2, arg3) {
   return window['go']['main']['App']['FindNewWords'](arg1, arg2, arg3);
 }
 
+export function GetRootByName(arg1) {
+  return window['go']['main']['App']['GetRootByName'](arg1);
+}
+
 export function SubmitVocabulary(arg1) {
   return window['go']['main']['App']['SubmitVocabulary'](arg1);
 }
