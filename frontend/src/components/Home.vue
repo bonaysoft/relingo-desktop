@@ -146,7 +146,7 @@ watch(currentTab, () => {
                 </v-card-subtitle>
               </v-card-item>
 
-              <v-card-text>
+              <v-card-text style="height: 100px;">
                 <div class="my-1 text-subtitle-1">
                   {{ word.raw_object?.translations.map(el => el.target).join('；') }}
                 </div>
