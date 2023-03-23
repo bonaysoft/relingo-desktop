@@ -52,8 +52,8 @@ const openDrawer = async (name: string) => {
     // item.direction = 'left'
     // item.expanded = false
     if (item.name == name) {
-    //   item.direction = 'right'
-    //   item.expanded = true
+      //   item.direction = 'right'
+      //   item.expanded = true
       item['background-color'] = 'orange'
     }
 
@@ -109,7 +109,10 @@ const openDrawer = async (name: string) => {
 }
 
 onMounted(refresh)
-watch(currentTab, refresh)
+watch(currentTab, () => {
+  page.value.pageNo = 1;
+  refresh()
+})
 </script>
 
 <template>
@@ -170,7 +173,7 @@ watch(currentTab, refresh)
         @update:model-value="refresh"></v-pagination>
     </div>
 
-    <v-navigation-drawer v-model="drawer" location="right" width="600" temporary>
+    <v-navigation-drawer v-model="drawer" location="bottom" width="600" temporary>
       <div id="jsdrawer">
         <div id="jsmind_container"></div>
       </div>
