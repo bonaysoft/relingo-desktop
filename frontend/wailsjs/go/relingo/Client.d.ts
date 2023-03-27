@@ -17,5 +17,3 @@ export function Ready():Promise<boolean>;
 export function SetToken(arg1:string):Promise<void>;
 
 export function SubmitVocabulary(arg1:Array<string>):Promise<void>;
-
-export function TokenHook(arg1:any):Promise<void>;

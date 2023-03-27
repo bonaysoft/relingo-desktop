@@ -4,12 +4,13 @@ go 1.18
 
 require (
 	github.com/bonaysoft/engra/apis v0.0.0-20230319055702-e3b14bbe2fdf
-	github.com/glebarez/sqlite v1.6.0
 	github.com/go-resty/resty/v2 v2.7.0
+	github.com/pelletier/go-toml/v2 v2.0.6
 	github.com/samber/lo v1.37.0
 	github.com/spf13/viper v1.15.0
 	github.com/wailsapp/wails/v2 v2.4.0
 	gopkg.in/elazarl/goproxy.v1 v1.0.0-20180725130230-947c36da3153
+	gorm.io/driver/sqlite v1.4.3
 	gorm.io/gen v0.3.19
 	gorm.io/gorm v1.24.3
 	gorm.io/plugin/dbresolver v1.4.0
@@ -21,7 +22,6 @@ require (
 	github.com/elazarl/goproxy v0.0.0-20221015165544-a0805db90819 // indirect
 	github.com/elazarl/goproxy/ext v0.0.0-20221015165544-a0805db90819 // indirect
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
-	github.com/glebarez/go-sqlite v1.20.0 // indirect
 	github.com/go-ole/go-ole v1.2.6 // indirect
 	github.com/go-sql-driver/mysql v1.7.0 // indirect
 	github.com/google/uuid v1.3.0 // indirect
@@ -37,11 +37,10 @@ require (
 	github.com/magiconair/properties v1.8.7 // indirect
 	github.com/mattn/go-colorable v0.1.12 // indirect
 	github.com/mattn/go-isatty v0.0.16 // indirect
+	github.com/mattn/go-sqlite3 v1.14.15 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
-	github.com/pelletier/go-toml/v2 v2.0.6 // indirect
 	github.com/pkg/browser v0.0.0-20210706143420-7d21f8c997e2 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
-	github.com/remyoudompheng/bigfft v0.0.0-20200410134404-eec4a21b6bb0 // indirect
 	github.com/spf13/afero v1.9.3 // indirect
 	github.com/spf13/cast v1.5.0 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
@@ -64,10 +63,6 @@ require (
 	gorm.io/datatypes v1.1.0 // indirect
 	gorm.io/driver/mysql v1.4.5 // indirect
 	gorm.io/hints v1.1.1 // indirect
-	modernc.org/libc v1.21.5 // indirect
-	modernc.org/mathutil v1.5.0 // indirect
-	modernc.org/memory v1.4.0 // indirect
-	modernc.org/sqlite v1.20.0 // indirect
 )
 
 // replace github.com/wailsapp/wails/v2 v2.3.1 => /opt/data/go/pkg/mod

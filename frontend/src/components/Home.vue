@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { ref, reactive, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router';
-import { FindNewWords, GetRootByName, SubmitVocabulary } from '../../wailsjs/go/main/App'
+import { FindNewWords, GetRootByName, SubmitVocabulary } from '../../wailsjs/go/service/WordService'
 import { Play } from '../../wailsjs/go/youdao/Client'
-import { main, model } from '../../wailsjs/go/models';
+import { service } from '../../wailsjs/go/models';
 
 
 import "jsmind/style/jsmind.css";
@@ -18,11 +18,11 @@ const dateTabs = ref<any[]>([
 const drawer = ref<boolean>(false)
 const total = ref<number>()
 const page = ref({ pageNo: 1, pageSize: 6, total: 0 })
-const words = ref<main.Word[]>([])
+const words = ref<service.Word[]>([])
 const currentTab = ref<any>('today')
 const refresh = () => {
   const { pageNo, pageSize } = page.value
-  FindNewWords(currentTab.value, pageNo, pageSize).then((result: main.ListResult) => {
+  FindNewWords(currentTab.value, pageNo, pageSize).then((result: service.ListResult) => {
     words.value = result.items
     total.value = result.total
     page.value.pageNo = pageNo

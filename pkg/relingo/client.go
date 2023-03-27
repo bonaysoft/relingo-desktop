@@ -9,16 +9,17 @@ import (
 )
 
 type Client struct {
-	hc *resty.Client
+	cfg *Config
 
-	token     string
-	tokenHook func(token string)
+	hc *resty.Client
 }
 
-func NewClient() *Client {
-	c := &Client{}
-	c.hc = resty.New().SetBaseURL("https://api.relingo.net/api").OnBeforeRequest(func(client *resty.Client, request *resty.Request) error {
-		if c.token == "" {
+func NewClient(cfg *Config) *Client {
+	c := &Client{
+		cfg: cfg,
+	}
+	c.hc = resty.New().SetBaseURL(cfg.BaseURL).OnBeforeRequest(func(client *resty.Client, request *resty.Request) error {
+		if !c.Ready() {
 			return errors.New("empty token")
 		}
 
@@ -27,17 +28,12 @@ func NewClient() *Client {
 	return c
 }
 
-func (c *Client) TokenHook(f func(token string)) {
-	c.tokenHook = f
-}
-
 func (c *Client) SetToken(token string) {
-	c.token = token
-	c.tokenHook(token)
+	c.cfg.Token = token
 }
 
 func (c *Client) Ready() bool {
-	return c.token != ""
+	return c.cfg.Token != ""
 }
 
 func (c *Client) GetUserInfo() (*RespUserInfo, error) {
@@ -135,7 +131,7 @@ func (c *Client) relingoHeaders() map[string]string {
 	return map[string]string{
 		"User-Agent":        "relingo-desktop",
 		"x-relingo-lang":    "cn",
-		"x-relingo-token":   c.token,
+		"x-relingo-token":   c.cfg.Token,
 		"x-relingo-version": "2.5.0",
 	}
 }

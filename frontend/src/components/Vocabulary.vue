@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref, reactive, onMounted } from 'vue'
 import { GetVocabulary, GetVocabularyList } from '../../wailsjs/go/relingo/Client';
-import { FindNewWords } from '../../wailsjs/go/main/App'
+import { FindNewWords } from '../../wailsjs/go/service/WordService'
 import { model } from '../../wailsjs/go/models';
 
 const vocabularyTab = ref()

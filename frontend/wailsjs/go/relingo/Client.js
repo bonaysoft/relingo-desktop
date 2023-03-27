@@ -33,7 +33,3 @@ export function SetToken(arg1) {
 export function SubmitVocabulary(arg1) {
   return window['go']['relingo']['Client']['SubmitVocabulary'](arg1);
 }
-
-export function TokenHook(arg1) {
-  return window['go']['relingo']['Client']['TokenHook'](arg1);
-}

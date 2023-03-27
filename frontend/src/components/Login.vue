@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { onMounted, ref } from "vue";
 import { Ready, GetUserInfo } from '@/../wailsjs/go/relingo/Client';
-import { DownloadCert } from '@/../wailsjs/go/main/App';
+import { DownloadCert } from '@/../wailsjs/go/service/System';
 const refresh = () => {
     location.reload();
 }
