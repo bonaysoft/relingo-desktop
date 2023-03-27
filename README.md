@@ -25,6 +25,13 @@
 
 - macOS 用户可以通过 Homebrew 来安装：`brew install --cask saltbo/bin/relingo`
 
+## 更新
+
+访问本项目的 [Releases](https://github.com/bonaysoft/relingo-desktop/releases) 页面下载安装包覆盖安装即可。
+
+- macOS 用户可以通过 Homebrew 来安装：`brew update && brew upgrade --cask saltbo/bin/relingo`
+
+
 ## ⚙️ 使用
 
 1. 首次运行软件会提示下载证书
