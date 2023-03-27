@@ -11,20 +11,20 @@ import (
 )
 
 type System struct {
-	ctx context.Context
+	ctxGetter func() context.Context
 }
 
-func NewSystem(ctx context.Context) *System {
+func NewSystem(ctxGetter func() context.Context) *System {
 	return &System{
-		ctx: ctx,
+		ctxGetter: ctxGetter,
 	}
 }
 
-func (a *System) DownloadCert() error {
+func (sys *System) DownloadCert() error {
 	opts := runtime.SaveDialogOptions{
 		DefaultFilename: "relingo-desktop.crt",
 	}
-	v, err := runtime.SaveFileDialog(a.ctx, opts)
+	v, err := runtime.SaveFileDialog(sys.ctxGetter(), opts)
 	if err != nil {
 		return err
 	}

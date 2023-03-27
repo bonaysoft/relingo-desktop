@@ -64,11 +64,15 @@ func (a *App) shutdown(ctx context.Context) {
 	_ = a.cm.Save()
 }
 
+func (a *App) getCtx() context.Context {
+	return a.ctx
+}
+
 func (a *App) getBinds() []interface{} {
 	return []interface{}{
 		a.rc,
 		a.wordSvc,
-		service.NewSystem(a.ctx),
+		service.NewSystem(a.getCtx),
 		&model.Word{},
 		youdao.NewClient(),
 	}
