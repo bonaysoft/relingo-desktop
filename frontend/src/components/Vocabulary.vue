@@ -1,31 +1,43 @@
 <script lang="ts" setup>
 import { ref, reactive, onMounted } from 'vue'
-import { GetVocabulary, GetVocabularyList } from '../../wailsjs/go/relingo/Client';
-import { FindNewWords } from '../../wailsjs/go/service/WordService'
+import { GetVocabulary, GetVocabularyList, MasteredWords } from '../../wailsjs/go/relingo/Client';
+import { FindNewWords, SubmitVocabulary } from '../../wailsjs/go/service/WordService'
 import { model } from '../../wailsjs/go/models';
 
-const vocabularyTab = ref()
+const vocabularyTab = ref<any>([])
+const masteredId = ref()
 const glossaries = ref<any>([])
+const words = ref<any>([])
 const refresh = async () => {
-    glossaries.value = (await GetVocabularyList()).filter(el => el.type == 'buildin')
+    const masteredWords = await MasteredWords(masteredId.value)
+    const { id, type } = vocabularyTab.value
+    words.value = (await GetVocabulary(id, type)).map(el => ({ word: el })).filter((el) => {
+        return masteredWords.indexOf(el.word) == -1
+    })
+}
+
+const submitVocabulary = (words: string[]) => {
+    SubmitVocabulary(words).then(refresh)
+}
+
+onMounted(async () => {
+    const ret = await GetVocabularyList()
+    masteredId.value = ret.find((el: any) => el.type == 'mastered')?._id
+    glossaries.value = ret.filter((el: any) => el.type == 'buildin')
 
     vocabularyTab.value = glossaries.value[0]
-    onCurrentTabChange()
-}
-
-const words = ref<any>([])
-const onCurrentTabChange = async () => {
-    const { id, type } = vocabularyTab.value
-    words.value = (await GetVocabulary(id, type)).map(el => ({ word: el }))
-}
-
-onMounted(refresh)
+    try {
+        refresh()
+    } catch (error) {
+        console.log(error);
+    }
+})
 
 </script>
 
 <template>
     <main>
-        <v-tabs v-model="vocabularyTab" bg-color="primary" @update:model-value="onCurrentTabChange">
+        <v-tabs v-model="vocabularyTab" bg-color="primary" @update:model-value="refresh">
             <v-tab v-for="(v, idx) in glossaries" :key="idx" :value="v">{{ v.name }}</v-tab>
         </v-tabs>
 
@@ -35,17 +47,24 @@ onMounted(refresh)
                     <th class="text-left">
                         单词
                     </th>
+                    <th class="text-right">
+                        操作
+                    </th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="item in words" :key="item.name">
-                    <td class="text-left">{{ item.word }}</td>
+                    <td class="text-left">
+                        <span>{{ item.word }}</span>
+                    </td>
+                    <td class="text-right">
+                        <v-btn size="small" color="surface-variant ml-3" variant="text" icon="mdi-check-all"
+                            @click="submitVocabulary([item.word || ''])"></v-btn>
+                    </td>
                 </tr>
             </tbody>
         </v-table>
     </main>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>
