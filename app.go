@@ -61,7 +61,10 @@ func (a *App) startup(ctx context.Context) {
 
 func (a *App) shutdown(ctx context.Context) {
 	_ = a.rProxy.Stop(ctx)
-	_ = a.cm.Save()
+	if err := a.cm.Save(); err != nil {
+		log.Println(err)
+		return
+	}
 }
 
 func (a *App) getCtx() context.Context {

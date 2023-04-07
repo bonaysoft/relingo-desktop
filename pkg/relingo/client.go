@@ -89,6 +89,7 @@ func (c *Client) MasteredWords(id string) ([]string, error) {
 	return c.GetVocabulary(id, "mastered")
 }
 
+// SubmitVocabulary 标记单词已掌握
 func (c *Client) SubmitVocabulary(words []string) error {
 	vs, err := c.GetVocabularyList()
 	if err != nil {

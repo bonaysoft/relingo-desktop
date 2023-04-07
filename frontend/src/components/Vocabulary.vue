@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
 import { GetVocabulary, GetVocabularyList, MasteredWords } from '../../wailsjs/go/relingo/Client';
 import { FindNewWords, SubmitVocabulary } from '../../wailsjs/go/service/WordService'
 import { model } from '../../wailsjs/go/models';
@@ -11,10 +11,14 @@ const words = ref<any>([])
 const refresh = async () => {
     const masteredWords = await MasteredWords(masteredId.value)
     const { id, type } = vocabularyTab.value
-    words.value = (await GetVocabulary(id, type)).map(el => ({ word: el })).filter((el) => {
-        return masteredWords.indexOf(el.word) == -1
-    })
+    words.value = (await GetVocabulary(id, type)).map(el => ({ word: el, checked: false, mastered: masteredWords.indexOf(el) == -1 }))
 }
+
+const selectedWords = computed(() => {
+    console.log(words.value.find((el: any) => el.checked == true));
+
+    return words.value.filter((el: any) => el.checked == true).map((el: any) => el.word)
+})
 
 const submitVocabulary = (words: string[]) => {
     SubmitVocabulary(words).then(refresh)
@@ -55,16 +59,26 @@ onMounted(async () => {
             <tbody>
                 <tr v-for="item in words" :key="item.name">
                     <td class="text-left">
-                        <span>{{ item.word }}</span>
+                        <v-checkbox :label="item.word" v-model="item.checked"></v-checkbox>
                     </td>
                     <td class="text-right">
-                        <v-btn size="small" color="surface-variant ml-3" variant="text" icon="mdi-check-all"
-                            @click="submitVocabulary([item.word || ''])"></v-btn>
+                        <v-btn v-show="!item.mastered" size="small" color="surface-variant ml-3" variant="text"
+                            icon="mdi-check-all" @click="submitVocabulary([item.word || ''])"></v-btn>
                     </td>
                 </tr>
             </tbody>
         </v-table>
+
+        <div class="ft" v-show="selectedWords && selectedWords.length > 0">
+            <v-btn @click="submitVocabulary(selectedWords)">一键掌握</v-btn>
+        </div>
     </main>
 </template>
 
-<style scoped></style>
+<style scoped>
+.ft {
+    position: fixed;
+    bottom: 10px;
+    left: 50%;
+}
+</style>
